@@ -74,7 +74,7 @@ u32 sha_c[] = {0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476, 0xC3D2E1F0} ;
 int main( int argc, char **argv)
 {
 	unsigned a, b, p, delay, limit, loops ;
-	int i, j, out, output, ret, claim, mul, mix ;
+	int i, j, out, output, foreground, ret, claim, mul, mix ;
 	char *u, *v ;
 
 	/*
@@ -97,6 +97,7 @@ int main( int argc, char **argv)
 		output to standard out
 	*/
 	output = 1 ;
+	foreground = 0 ;
 
 	/* argument processing */
 	prog_name = *argv ;
@@ -160,6 +161,13 @@ int main( int argc, char **argv)
 					claim = 16 ;
 					limit = 16 ;
 					break ;
+				// as -g but don't daemonize
+				case 'G' :
+					delay = primes[1] ;
+					claim = 16 ;
+					limit = 16 ;
+					foreground = 1;
+					break ;
 				// for the paranoids
 				// -x, -y -z do more loops
 				case 'x' :
@@ -215,7 +223,7 @@ int main( int argc, char **argv)
 	if( demon )	{
 		if( (output=open("/dev/random", O_WRONLY)) == -1)
 			error_exit("failed to open /dev/random") ;
-		if (daemon(-1, -1) == -1)
+		if( !foreground && daemon(-1, -1) == -1)
 			error_exit("failed to become daemon process") ;
 		openlog( prog_name, (LOG_CONS|LOG_PID), LOG_DAEMON) ;
 	}
