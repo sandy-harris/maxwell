@@ -300,7 +300,7 @@ void message(const char *reason)
 void usage()
 {
 	fprintf(stderr, "usage: %s [-p <number>] [-d <number>] [-s <number>] [-c number]\n", prog_name) ;
-	fprintf(stderr, "usage: %s [-f|-g|-m|-t|-x|-y|-z|-<digit>]\n", prog_name) ;
+	fprintf(stderr, "usage: %s [-f|-g|-G|-m|-t|-x|-y|-z|-<digit>]\n", prog_name) ;
 	exit(-1) ;
 }
 

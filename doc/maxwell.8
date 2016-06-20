@@ -110,6 +110,9 @@ equivalent to	-d 41 -c 16 -s 8
 TP
 .I -g
 equivalent to	-d 43 -c 16 -s 16
+TP
+.I -G
+equivalent to   -g   but not daemonizing
 
 .PP
 Three are intended to let a cautious system administrator
@@ -126,7 +129,7 @@ TP
 equivalent to	-w 109 -p 4
 
 .PP
-Each of -f, -g, -x, -y, -z, and the default with
+Each of -f, -g, -G, -x, -y, -z, and the default with
 no options uses a different prime number for the wait.
 
 Other options are provided for testing.
