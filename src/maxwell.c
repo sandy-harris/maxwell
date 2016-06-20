@@ -3,9 +3,9 @@
 	and feed it to random(4)
 
 	It borrows some code from Folkert van Heusden's
-	timer entropy demon http://www.vanheusden.com/te/
+	timer entropy daemon http://www.vanheusden.com/te/
 	but the two programs are quite different.
-	
+
 	License is GPL v2, the same as the earlier code.
 
 	If anyone needs it under another Open Source
@@ -64,7 +64,7 @@ u32 sha_c[] = {0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476, 0xC3D2E1F0} ;
 
 /*
 	constant for multiplications
-	
+
 	11, 37 and 71 are 3, 5 and 7 mod 8
 	so they all give some mixing in the low bits
 	and they each do it differently
@@ -206,7 +206,7 @@ int main( int argc, char **argv)
 	// documented in getuid(1) as "always successful"
 	// so do not bother checking for failure
 	user = geteuid() ;
-	
+
 	/*
 		set up various things
 	*/
@@ -246,7 +246,7 @@ int main( int argc, char **argv)
 			a = 0 ;
 		// main loop; sample & mix
 		for( i = 0 ; i < loops ; i++)	{
-			// get 16 samples for entropy 
+			// get 16 samples for entropy
 			for( j = 0 ; j < 16 ; j++ )	{
 				usleep(delay) ;
 				// mix in a sample

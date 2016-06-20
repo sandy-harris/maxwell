@@ -39,7 +39,7 @@
 	or sec and usec
 	so multiplier is a million
 	or a billion
-	
+
 	if you want total time
 	(B * sec) + nsec
 	(M * sec) + usec
