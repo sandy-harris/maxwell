@@ -3,9 +3,9 @@
 	and feed it to random(4)
 
 	It borrows some code from Folkert van Heusden's
-	timer entropy demon http://www.vanheusden.com/te/
+	timer entropy daemon http://www.vanheusden.com/te/
 	but the two programs are quite different.
-	
+
 	License is GPL v2, the same as the earlier code.
 
 	If anyone needs it under another Open Source
@@ -64,7 +64,7 @@ u32 sha_c[] = {0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476, 0xC3D2E1F0} ;
 
 /*
 	constant for multiplications
-	
+
 	11, 37 and 71 are 3, 5 and 7 mod 8
 	so they all give some mixing in the low bits
 	and they each do it differently
@@ -74,7 +74,7 @@ u32 sha_c[] = {0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476, 0xC3D2E1F0} ;
 int main( int argc, char **argv)
 {
 	unsigned a, b, p, delay, limit, loops ;
-	int i, j, out, output, ret, claim, mul, mix ;
+	int i, j, out, output, foreground, ret, claim, mul, mix ;
 	char *u, *v ;
 
 	/*
@@ -97,6 +97,7 @@ int main( int argc, char **argv)
 		output to standard out
 	*/
 	output = 1 ;
+	foreground = 0 ;
 
 	/* argument processing */
 	prog_name = *argv ;
@@ -160,6 +161,13 @@ int main( int argc, char **argv)
 					claim = 16 ;
 					limit = 16 ;
 					break ;
+				// as -g but don't daemonize
+				case 'G' :
+					delay = primes[1] ;
+					claim = 16 ;
+					limit = 16 ;
+					foreground = 1;
+					break ;
 				// for the paranoids
 				// -x, -y -z do more loops
 				case 'x' :
@@ -198,7 +206,7 @@ int main( int argc, char **argv)
 	// documented in getuid(1) as "always successful"
 	// so do not bother checking for failure
 	user = geteuid() ;
-	
+
 	/*
 		set up various things
 	*/
@@ -215,7 +223,7 @@ int main( int argc, char **argv)
 	if( demon )	{
 		if( (output=open("/dev/random", O_WRONLY)) == -1)
 			error_exit("failed to open /dev/random") ;
-		if (daemon(-1, -1) == -1)
+		if( !foreground && daemon(-1, -1) == -1)
 			error_exit("failed to become daemon process") ;
 		openlog( prog_name, (LOG_CONS|LOG_PID), LOG_DAEMON) ;
 	}
@@ -238,7 +246,7 @@ int main( int argc, char **argv)
 			a = 0 ;
 		// main loop; sample & mix
 		for( i = 0 ; i < loops ; i++)	{
-			// get 16 samples for entropy 
+			// get 16 samples for entropy
 			for( j = 0 ; j < 16 ; j++ )	{
 				usleep(delay) ;
 				// mix in a sample
@@ -292,7 +300,7 @@ void message(const char *reason)
 void usage()
 {
 	fprintf(stderr, "usage: %s [-p <number>] [-d <number>] [-s <number>] [-c number]\n", prog_name) ;
-	fprintf(stderr, "usage: %s [-f|-g|-m|-t|-x|-y|-z|-<digit>]\n", prog_name) ;
+	fprintf(stderr, "usage: %s [-f|-g|-G|-m|-t|-x|-y|-z|-<digit>]\n", prog_name) ;
 	exit(-1) ;
 }
 

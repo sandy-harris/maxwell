@@ -1,0 +1,9 @@
+[Unit]
+Description=Maxwell - Daemon for gathering entropy from a timer and feeding it to random(4)
+
+[Service]
+Type=forking
+ExecStart=/usr/bin/maxwell
+
+[Install]
+WantedBy=basic.target

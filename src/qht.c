@@ -10,7 +10,7 @@
 
 	Underlying primitive is IDEA
 	multiplication which mixes
-	a pair of 16-bit objects 
+	a pair of 16-bit objects
 
 	This is analogous to the
 	pseudo-Hadamard transform

@@ -1,0 +1,9 @@
+[Unit]
+Description=Maxwell set to quickly seed /dev/random
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/maxwell -G
+
+[Install]
+WantedBy=sysinit.target
