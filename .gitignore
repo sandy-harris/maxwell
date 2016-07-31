@@ -1,3 +1,15 @@
 src/maxwell
 src/qht.o
 src/timermod.o
+src/test.mix
+src/test.sam
+src/test.qht
+src/test.parity
+src/test.summary
+src/results/max.1.out
+src/results/mix.out
+src/results/par.g.out
+src/results/parity.out
+src/results/qht.out
+src/results/raw.out
+src/results/usec.out
