@@ -2,8 +2,6 @@
 
 #define LIMIT (256*1024)	// a megabyte of output
 
-#define MUL (71+(37<<12)+(11<<19))
-
 int main( int argc, char **argv)
 {
 	u32 a, b, x ;
