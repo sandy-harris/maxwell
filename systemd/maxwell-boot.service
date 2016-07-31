@@ -3,7 +3,7 @@ Description=Maxwell set to quickly seed /dev/random
 
 [Service]
 Type=oneshot
-ExecStart=/usr/bin/maxwell -G
+ExecStart=/usr/bin/maxwell
 
 [Install]
 WantedBy=sysinit.target
