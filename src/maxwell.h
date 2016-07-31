@@ -5,6 +5,15 @@
 
 typedef unsigned u32 ;
 
+/*
+	constant for multiplications
+
+	11, 37 and 71 are 3, 5 and 7 mod 8
+	so they all give some mixing in the low bits
+	and they each do it differently
+*/
+#define MUL (71+(37<<12)+(11<<19))
+
 /* forward declarations of functions */
 
 u32 qht(u32) ;

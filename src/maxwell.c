@@ -74,15 +74,6 @@ unsigned smallp[] = {43, 47,  53,  57,  59} ;	// median  53, mean 51.8
 u32 sha_c[] = {0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476, 0xC3D2E1F0} ;
 
 /*
-	constant for multiplications
-
-	11, 37 and 71 are 3, 5 and 7 mod 8
-	so they all give some mixing in the low bits
-	and they each do it differently
-*/
-#define MUL (71+(37<<12)+(11<<19))
-
-/*
 	produce one K bit of output
 	32 32-bit words
 */
