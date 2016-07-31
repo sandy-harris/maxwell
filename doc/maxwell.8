@@ -1,4 +1,4 @@
-.TH MAXWELL 8 2011-09-30 Linux 
+.TH MAXWELL 8 2016-07-30 Linux 
 
 .SH NAME
 Maxwell \- Daemon for gathering entropy from a timer and feeding it to
@@ -7,20 +7,12 @@ Maxwell \- Daemon for gathering entropy from a timer and feeding it to
 .SH SYNOPSIS.
 .ll +8
 .B maxwell
-.RB [ " \-dfgmtxy " ]
+.RB [\-s ]
 .B maxwell
-.RB [ " \-<digit> " ]
-
-.B maxwell [\-c 
-.I number
-]
 [\-p 
 .I number
 ]
-[\-s 
-.I number
-]
-[\-w 
+[\-f 
 .I number
 ]
 
@@ -30,137 +22,94 @@ Maxwell \- Daemon for gathering entropy from a timer and feeding it to
 collects randomness from the small variations in a system
 timer, distills it into a concentrated form, and sends it to
 .BR random (4).
-
-Non-root users can run the program only with the -t (test)
-option, which sends test data to standard output.
-
-The amount of output varies with the parameters chosen, but is
-generally a few K bits per second. The quality
+The amount of output is a few K bits per second,
+and the quality
 is intended to be very high. Both volume and quality should be
 adequate for most applications.
+
+Non-root users can run the program only with the -s (stdout)
+option, which sends test data to standard output.
 
 There are a number of other ways to feed entropy to
 .BR random (4).
 The advantage of
 .I maxwell
-is that it is small, simple
-and only minimally hardware-dependent. The other methods
-also have advantages, and in many cases one of them will
-be preferable to this one.
- 
-For fuller discussion, see the design paper listed in
-the references.
+is that it is small, simple and only minimally
+hardware-dependent.
+The other methods also have advantages, and in
+many cases one of them will be preferable to
+this one. For discussion, see the design
+paper listed in the references.
+
+This man page is for maxwell version 2 (2016); the options have changed considerably from version 1 (2012).
 
 .SH OPTIONS
 
-Three options with numeric arguments allow changing the parameters
-with which the program runs. These may be omitted, in which case
-default values are used.
-
-The numeric arguments are required, and must be in the range 0-999.
-.TP 
-.BI \-c \ n
-Claim, how much entropy do we tell random(4) we
-are giving it per 32-bit output? Legal values
-are 0 to 32. Anything > 32 sets it to 32.
-
-Default is 30.
+Two options take no parameters; these are intended mainly for use in testing:
 
 .TP 
-.BI \-d \ n
-Delay, microseconds between timer samples.
+.BI \-s
+Send output to standard output instead of to /dev/random.
 
-Default is 97.
+Other options let
+you control the amount and type of output, and it can be
+piped into test tools or sent to a file for later analysis.
 
-.TP 
-.BI \-p \ n
-Paranoia, affects how much looping is done  before
-each output. Number of loops is 2p + 3. Each loop
-collects sixteen timer samples for entropy. 
-
-Default is p = 0 which gives three loops. 
-
-.TP 
-.BI \-s \ n
-Stop after n kilobits of output.
-
-Default is for the program to continue indefinitely.
-
-.PP
-The above options may be combined at will.
-
-Additional options are provided for convenience. They are
-a handy way to get a useful combination of options. These
-options
-.I must
-be used alone; they may not be combined either
-with each other or with the options listed above.
-
-Two are intended for use at startup, to quickly fill
-up the entropy pool. They use smaller delay values,
-so they are faster. The claim less entropy so that
-.BR random (4)
-will accept their output more quickly. Both stop
-after a fixed amount of output, but they use
-different amounts.
+A
+.I non-root user cannot run the program without this option.
+It will just output an error message and quit. With the option,
+it can be run for testing. It can also be redirected into
+/dev/random, though no entropy credit will be given.
 
 .TP
-.I -f
-equivalent to	-d 41 -c 16 -s 8
-TP
-.I -g
-equivalent to	-d 43 -c 16 -s 16
-TP
-.I -G
-equivalent to   -g   but not daemonizing
+.BI -<digit>
+This runs the given number of loops, where without this option
+at least three are always used. It also omits the extra mixing normally done outside
+the loop. It is normally used with the -s option.
 
-.PP
-Three are intended to let a cautious system administrator
-run a more conservative version of the daemon. They use
-higher paranoia settings.
-TP
-.I -x
-equivalent to	-d 103 -p 2
-TP
-.I -y
-equivalent to	-w 107 -p 3
-TP
-.I -z
-equivalent to	-w 109 -p 4
-
-.PP
-Each of -f, -g, -G, -x, -y, -z, and the default with
-no options uses a different prime number for the wait.
-
-Other options are provided for testing.
-
-Two of these use
-default parameters, except that they send output to standard
-out instead of to
-.I /dev/random.
-
-.TP
-.I -m
-Produce one megabit of test output.
-
-.TP
-.I -t
-Produce test output indefinitely.
-
-.TP
-.I -<digit>
-This runs the given number of loops, where any other combination of options runs
-at least three. It also omits the extra mixing normally done outside
-the loop. It stops after a megabit of output.
-
-.PP
 If
-.I maxwell -1 | ent
+.I maxwell -1 -s | ent
 shows >= three bits of entropy per byte, then
 .I maxwell
 is safe. That is 12 bits per loop and
 .I maxwell
 uses at least three loops per output.
+
+.PP
+Several options with numeric arguments allow changing the parameters
+with which the program runs. The options may be omitted, in which case
+default values are used.
+
+The numeric arguments are required, and must be in the range 0-99.
+
+.TP 
+.BI \-p \ n
+Paranoia, affects how much looping is done before
+each output. The number of loops done is 2p + 3.
+Each loop collects sixteen timer samples for entropy. 
+
+Default is p = 0 which gives three loops.
+
+.TP 
+.BI \-f \ n
+At startup, the program produces some output using
+parameters chosen to quickly fill up the random(4)
+pool. After that, it changes to more conservative
+parameters for longer-term use. This parameter controls how much of the first fast
+data is generated, in kilobits.
+
+Default is 4, enough to completely fill the pool
+if random(4) is compiled with its default parameters.
+
+.TP 
+.BI \-h \ n
+Halt after n kilobits of output.
+
+Default is for the program to continue indefinitely,
+but limiting the output is useful for testing.
+
+.PP
+The above options may be combined at will.
 
 .SH BUGS
 
@@ -178,11 +127,11 @@ than this minium requirement. See the design paper.
 
 .SH TESTING
 
-In addition to the -t option described above, there is s test
+In addition to the -s option described above, there is a test
 program called test.sam.c in the source directory. It is designed
 to have its output piped into ent(1), an entropy testing program.
 
-This tests at a lower level than maxwell -t; it samples data in
+This tests at a lower level than maxwell -s; it samples data in
 the same way maxwell does, but does no mixing at all, just packs
 each sample into a byte and sends it out.
 
@@ -215,6 +164,8 @@ http://lwn.net/images/conf/rtlws11/papers/paper.37.html
 by Sandy Harris documents the design rationale for
 this program.
 
-That paper is included in PDF format in the
-source directory for the daemon. If you need
-source, under a CC-by-SA license, email me.  
+That paper is included in ODF and PDF formats in the
+source directory for the daemon. License is CC-by-SA;
+the program and this man page are under GPL. If you
+need either under some other open source license,
+email me: sandyinchina@gmail.com.
