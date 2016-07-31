@@ -16,6 +16,8 @@
 		different command-line options
 		constants LO_CLAIM & HI_CLAIM
 		(instead of a different prime for each option)
+		at startup, do fast output to fill up the pool
+		(David Jasa's -G option is now the default)
 		moving actual output from main() to do1k()
 		random choice of delay in do1k()
 
