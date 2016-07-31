@@ -55,7 +55,7 @@
 	this is preferable to the gmod()
 	routine below
 */
-unsigned tmod(m)
+unsigned tmod(int m)
 {
 	struct timespec t ;
 	int ret ;
@@ -91,7 +91,7 @@ unsigned tmod(m)
 	Could also be used on a system that
 	lacks the realtime clocks
 */
-unsigned gmod(m)
+unsigned gmod(int m)
 {
 	struct timeval t ;
 	int ret ;
