@@ -74,57 +74,8 @@ unsigned smallp[] = {43, 47,  53,  57,  59} ;	// median  53, mean 51.8
 */
 u32 sha_c[] = {0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476, 0xC3D2E1F0} ;
 
-/*
-	produce one K bit of output
-	32 32-bit words
-*/
-void do1k( unsigned delay, unsigned claim )
-{
-	int i, j, k, ret ;
-	unsigned a, b ;
-
-	// fprintf( stderr, "do1k delay %d claim %d mix %d loops %d\n", delay, claim, mix, loops) ;
-
-	for( i = 0 ; i < 32 ; i++ )	{
-		if( mix )
-			// initialise with a somewhat random constant
-			a = sha_c[t5()] ;
-		else
-			a = 0 ;
-		// main loop; sample & mix
-		for( j = 0 ; j < loops ; j++)	{
-			// get 16 samples for entropy
-			for( k = 0 ; k < 16 ; k++ )	{
-				usleep(delay) ;
-				// mix in a sample
-				// multiplication spreads bits out
-				a += ( t31() * mul ) ;
-				// rotate left by two bits
-				b = a >> 30 ;
-				a = (a << 2) | b ;
-			}
-			if( loops > 1 )	{
-				// rotate by one bit between loops
-				b = a >> 31 ;
-				a = (a << 1) | b ;
-			}
-		}
-		// mix thoroughly
-		if( mix )
-			a = qht(a) ;
-		// output 32 bits
-		if( (ret = write( output, &a, 4)) != 4)
-			error_exit("write to output file failed") ;
-		// update entropy estimate
-		if( demon )	{
-			// a failure here is logged
-			// but does not stop the program
-			// it does no real harm
-			if( (ioctl(output, RNDADDTOENTCNT, claim)) == -1)
-				message("ioctl() failed") ;
-		}
-	}
-}
+// forward declarations
+void do1k( unsigned, unsigned ) ;
 
 int main( int argc, char **argv)
 {
@@ -252,6 +203,58 @@ int main( int argc, char **argv)
 
 	message( "shutting down" );
 	exit(0) ;
+}
+
+/*
+	produce one K bit of output
+	32 32-bit words
+*/
+void do1k( unsigned delay, unsigned claim )
+{
+	int i, j, k, ret ;
+	unsigned a, b ;
+
+	// fprintf( stderr, "do1k delay %d claim %d mix %d loops %d\n", delay, claim, mix, loops) ;
+
+	for( i = 0 ; i < 32 ; i++ )	{
+		if( mix )
+			// initialise with a somewhat random constant
+			a = sha_c[t5()] ;
+		else
+			a = 0 ;
+		// main loop; sample & mix
+		for( j = 0 ; j < loops ; j++)	{
+			// get 16 samples for entropy
+			for( k = 0 ; k < 16 ; k++ )	{
+				usleep(delay) ;
+				// mix in a sample
+				// multiplication spreads bits out
+				a += ( t31() * mul ) ;
+				// rotate left by two bits
+				b = a >> 30 ;
+				a = (a << 2) | b ;
+			}
+			if( loops > 1 )	{
+				// rotate by one bit between loops
+				b = a >> 31 ;
+				a = (a << 1) | b ;
+			}
+		}
+		// mix thoroughly
+		if( mix )
+			a = qht(a) ;
+		// output 32 bits
+		if( (ret = write( output, &a, 4)) != 4)
+			error_exit("write to output file failed") ;
+		// update entropy estimate
+		if( demon )	{
+			// a failure here is logged
+			// but does not stop the program
+			// it does no real harm
+			if( (ioctl(output, RNDADDTOENTCNT, claim)) == -1)
+				message("ioctl() failed") ;
+		}
+	}
 }
 
 void error_exit(const char *reason)
