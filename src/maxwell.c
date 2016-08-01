@@ -19,7 +19,7 @@
 		at startup, do fast output to fill up the pool
 		(David Jasa's -G option is now the default)
 		moving actual output from main() to do1k()
-		random choice of delay in do1k()
+		random choice of delay as argument to do1k()
 
 	Sandy Harris, sandyinchina@gmail.com
 */
@@ -148,11 +148,6 @@ int main( int argc, char **argv)
 	mix = 1 ;
 	mul = MUL ;
 	loops = MIN_LOOPS ;
-	/*
-		default unless overriden by demon=1
-		output to standard out
-	*/
-	output = 1 ;
 
 	/* argument processing */
 	prog_name = *argv ;
@@ -232,6 +227,8 @@ int main( int argc, char **argv)
 			error_exit("failed to become daemon process") ;
 		openlog( prog_name, (LOG_CONS|LOG_PID), LOG_DAEMON) ;
 	}
+	// output to standard out
+	else	output = 1 ;
 
 	message( "maxwell(8) v 2" );
 
@@ -244,7 +241,7 @@ int main( int argc, char **argv)
 	for( i = 0 ; (i < fast) && ((halt == 0) || (i < halt)) ; i++ )
 		do1k( smallp[t5()], LO_CLAIM ) ;
 
-	// -p takes efect here
+	// -p takes effect here
 	loops = MIN_LOOPS + 2*p ;
 	// fprintf( stderr, "main loop: p %d loops %d halt %d fast %d output %d demon %d\n", p, loops, halt, fast, output, demon ) ;
 
