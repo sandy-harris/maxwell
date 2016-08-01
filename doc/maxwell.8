@@ -28,7 +28,7 @@ is intended to be very high. Both volume and quality should be
 adequate for most applications.
 
 Non-root users can run the program only with the -s (stdout)
-option, which sends test data to standard output.
+or -<digit> options, which send test data to standard output.
 
 There are a number of other ways to feed entropy to
 .BR random (4).
@@ -56,8 +56,8 @@ you control the amount and type of output, and it can be
 piped into test tools or sent to a file for later analysis.
 
 A
-.I non-root user cannot run the program without this option.
-It will just output an error message and quit. With the option,
+.I non-root user cannot run the program without this option or
+-<digit>. It will just output an error message and quit. With the option,
 it can be run for testing. It can also be redirected into
 /dev/random, though no entropy credit will be given.
 
@@ -65,10 +65,10 @@ it can be run for testing. It can also be redirected into
 .BI -<digit>
 This runs the given number of loops, where without this option
 at least three are always used. It also omits the extra mixing normally done outside
-the loop. It is normally used with the -s option.
+the loop. It sends output to standard out.
 
 If
-.I maxwell -1 -s | ent
+.I maxwell -1 | ent
 shows >= three bits of entropy per byte, then
 .I maxwell
 is safe. That is 12 bits per loop and

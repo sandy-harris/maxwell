@@ -168,6 +168,8 @@ int main( int argc, char **argv)
 				// no mixing for test output
 				mix = 0 ;
 				mul = 1 ;
+				// output to stdout
+				demon = 0 ;
 				break ;
 			// output to stdout
 			case 's':
