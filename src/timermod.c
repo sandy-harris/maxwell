@@ -140,6 +140,17 @@ u32 g31(){ return( gmod(31)+1 ) ; }
 	functions to take the parity
 	of a timer
 */
+
+// Kernighan's method
+// https://graphics.stanford.edu/~seander/bithacks.html#CountBitsSetKernighan
+unsigned parity(unsigned v)
+{
+	unsigned c;		// c accumulates the total bits set in v
+	for (c = 0; v; c++)
+		v &= v - 1;	// clear the least significant bit set
+	return c ;
+}
+
 unsigned tpar()
 {
 	struct timespec t ;
@@ -163,15 +174,4 @@ unsigned gpar()
 	}
 	x = parity(t.tv_sec ^ t.tv_usec ) ;
 	return( x ) ;
-}
-
-/*
-	brute force solution
-*/
-unsigned parity(unsigned x)
-{
-	unsigned p ;
-	for( p = 0 ; x ; x >>= 1)
-		p ^= (x&1) ;
-	return(p) ;
 }

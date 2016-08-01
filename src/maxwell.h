@@ -37,5 +37,3 @@ u32 g255() ;
 
 u32 gpar() ;
 u32 tpar() ;
-
-u32 parity(u32) ;
