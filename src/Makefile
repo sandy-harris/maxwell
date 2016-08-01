@@ -27,7 +27,6 @@ results/usec.out: test.sam results
 
 results/qht.out: test.qht results
 	./test.qht		| ent > results/qht.out
-
 results/mix.out: test.mix results
 	./test.mix		| ent > results/mix.out
 
