@@ -3,11 +3,6 @@
 #include <sys/time.h>
 
 /*
-	Some code here is a bit sloppy and might
-	fail on a 16-bit machine. I declare several
-	variables as unsigned then assign items of
-	type time_t or even long into them.
-
 	To extract bits from the timer, we use
 	timer modulo 5, 7, 31 or 255
 
@@ -64,11 +59,11 @@ int got_clock( void )
 	this is preferable to the gmod()
 	routine below
 */
-unsigned tmod(int m)
+u32 tmod(int m)
 {
 	struct timespec t ;
 	int ret ;
-	unsigned x ;
+	u32 x ;
 	// use monotonic clock, which not even root can reset
 	if( (ret = clock_gettime(CLOCK_MONOTONIC,&t)) == -1)	{
 		fprintf(stderr,"timer mod: clock read fails\n") ;
@@ -100,11 +95,11 @@ unsigned tmod(int m)
 	Could also be used on a system that
 	lacks the realtime clocks
 */
-unsigned gmod(int m)
+u32 gmod(int m)
 {
 	struct timeval t ;
 	int ret ;
-	unsigned x ;
+	u32 x ;
 	if( (ret = gettimeofday(&t,NULL)) == - 1)	{
 		fprintf(stderr,"timer mod: clock read fails\n") ;
 	}
@@ -127,11 +122,11 @@ unsigned gmod(int m)
 	they could likely be done as macros
 */
 
-u32 t5(){ return( tmod(5) ) ; }
-u32 g5(){ return( gmod(5) ) ; }
+u32 t5(void){ return( tmod(5) ) ; }
+u32 g5(void){ return( gmod(5) ) ; }
 
-u32 t255(){ return( tmod(255) ) ; }
-u32 g255(){ return( gmod(255) ) ; }
+u32 t255(void){ return( tmod(255) ) ; }
+u32 g255(void){ return( gmod(255) ) ; }
 
 /*
 	these are not quite timer modulo x
@@ -139,11 +134,11 @@ u32 g255(){ return( gmod(255) ) ; }
 	rather than 0 to x-1 for modulo
 	always non-zero
 */
-u32 t7(){ return( tmod(7)+1 ) ; }
-u32 g7(){ return( gmod(7)+1 ) ; }
+u32 t7(void){ return( tmod(7)+1 ) ; }
+u32 g7(void){ return( gmod(7)+1 ) ; }
 
-u32 t31(){ return( tmod(31)+1 ) ; }
-u32 g31(){ return( gmod(31)+1 ) ; }
+u32 t31(void){ return( tmod(31)+1 ) ; }
+u32 g31(void){ return( gmod(31)+1 ) ; }
 
 /*
 	functions to take the parity
@@ -152,19 +147,19 @@ u32 g31(){ return( gmod(31)+1 ) ; }
 
 // Kernighan's method
 // https://graphics.stanford.edu/~seander/bithacks.html#CountBitsSetKernighan
-unsigned parity(unsigned v)
+u32 parity(u32 v)
 {
-	unsigned c;		// c accumulates the total bits set in v
+	u32 c;		// c accumulates the total bits set in v
 	for (c = 0; v; c++)
 		v &= v - 1;	// clear the least significant bit set
 	return c ;
 }
 
-unsigned tpar()
+u32 tpar(void)
 {
 	struct timespec t ;
 	int ret ;
-	unsigned x ;
+	u32 x ;
 	// use monotonic clock, which not even root can reset
 	if( (ret = clock_gettime(CLOCK_MONOTONIC,&t)) == - 1)	{
 		fprintf(stderr,"timer mod: clock read fails\n") ;
@@ -173,11 +168,11 @@ unsigned tpar()
 	return( x ) ;
 }
 
-unsigned gpar()
+u32 gpar(void)
 {
 	struct timeval t ;
 	int ret ;
-	unsigned x ;
+	u32 x ;
 	if( (ret = gettimeofday(&t,NULL)) == - 1)	{
 		fprintf(stderr,"timer mod: clock read fails\n") ;
 	}

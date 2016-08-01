@@ -1,9 +1,10 @@
 #include <stdio.h>
 #include <stddef.h>
 #include <stdlib.h>
+#include <stdint.h>
 #include <unistd.h>
 
-typedef unsigned u32 ;
+typedef uint32_t u32 ;
 
 /*
 	constant for multiplications

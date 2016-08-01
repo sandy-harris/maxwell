@@ -62,8 +62,8 @@ int user, demon, output, loops, mix, mul ;
 
 	used as microsecond delay values
 */
-unsigned primes[] = {89, 97, 101, 103, 107} ;	// median 101, mean 99.4
-unsigned smallp[] = {43, 47,  53,  57,  59} ;	// median  53, mean 51.8
+u32 primes[] = {89, 97, 101, 103, 107} ;	// median 101, mean 99.4
+u32 smallp[] = {43, 47,  53,  57,  59} ;	// median  53, mean 51.8
 
 /*
 	constants borrowed from SHA-1
@@ -75,7 +75,7 @@ unsigned smallp[] = {43, 47,  53,  57,  59} ;	// median  53, mean 51.8
 u32 sha_c[] = {0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476, 0xC3D2E1F0} ;
 
 // forward declarations
-void do1k( unsigned, unsigned ) ;
+void do1k( u32, u32 ) ;
 void error_exit(const char *) ;
 void message(const char *) ;
 
@@ -214,10 +214,10 @@ int main( int argc, char **argv)
 	produce one K bit of output
 	32 32-bit words
 */
-void do1k( unsigned delay, unsigned claim )
+void do1k( u32 delay, u32 claim )
 {
 	int i, j, k, ret ;
-	unsigned a, b ;
+	u32 a, b ;
 
 	// fprintf( stderr, "do1k delay %d claim %d mix %d loops %d\n", delay, claim, mix, loops) ;
 
