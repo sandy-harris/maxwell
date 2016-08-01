@@ -10,7 +10,8 @@ typedef unsigned u32 ;
 
 	11, 37, 71 and 41 are 3, 5, 7 and 9 mod 16
 	so they all give some mixing in the low bits
-	and they each do it differently
+	and they each do it differently. Then the
+	shifts make them do it in different places.
 
 	These get multiplied by a value taken mod 31
 	so each of the shifted constants can affect
