@@ -12,7 +12,7 @@
 	license, they can contact me.
 
 	This is version 2, 2016
-	The main changes from v1, 2012 are
+	The main changes from v1, 2012, are:
 		different command-line options
 		constants LO_CLAIM & HI_CLAIM
 		(instead of a different prime for each option)
@@ -37,7 +37,6 @@
 #include <sys/ioctl.h>
 #include <sys/stat.h>
 
-int good_opt(char *) ;
 int good_num(char *) ;
 
 void usage() ;
@@ -117,12 +116,13 @@ void do1k( unsigned delay, unsigned claim )
 		if( (ret = write( output, &a, 4)) != 4)
 			error_exit("write to output file failed") ;
 		// update entropy estimate
-		if( demon )
+		if( demon )	{
 			// a failure here is logged
 			// but does not stop the program
 			// it does no real harm
 			if( (ioctl(output, RNDADDTOENTCNT, claim)) == -1)
 				message("ioctl() failed") ;
+		}
 	}
 }
 
@@ -173,8 +173,6 @@ int main( int argc, char **argv)
 				// no mixing for test output
 				mix = 0 ;
 				mul = 1 ;
-				// output to stdout
-				// demon = 0 ;
 				break ;
 			// output to stdout
 			case 's':
@@ -197,7 +195,7 @@ int main( int argc, char **argv)
 				fast = atoi(v) ;
 				argc-- ; argv++ ;
 				break ;
-			// halt after K bits
+			// total output in K bits, then halt
 			case 'h' :
 				v = argv[1] ;
 				if( (v == NULL) || !good_num(v) )
@@ -237,18 +235,20 @@ int main( int argc, char **argv)
 
 	message( "maxwell(8) v 2" );
 
+	// fprintf( stderr, "fast loop: p %d loops %d halt %d fast %d output %d demon %d\n", p, loops, halt, fast, output, demon ) ;
+
 	// first loop, fast output to fill random(4) pool
 	// uses smaller prime and default loops == MIN_LOOPS for speed
 	// -p option has no effect here; not needed when claiming only LO_CLAIM
 	// halt == 0 means run forever
-	// fprintf( stderr, "fast loop: p %d loops %d halt %d fast %d output %d demon %d\n", p, loops, halt, fast, output, demon ) ;
 	for( i = 0 ; (i < fast) && ((halt == 0) || (i < halt)) ; i++ )
 		do1k( smallp[t5()], LO_CLAIM ) ;
 
-	// main loop, halt == 0 means run forever
 	// -p takes efect here
 	loops = MIN_LOOPS + 2*p ;
 	// fprintf( stderr, "main loop: p %d loops %d halt %d fast %d output %d demon %d\n", p, loops, halt, fast, output, demon ) ;
+
+	// main loop, halt == 0 means run forever
 	for( /* continue with same i */ ; (halt == 0) || (i < halt) ; i++ )
 		do1k( primes[t5()], HI_CLAIM ) ;
 
