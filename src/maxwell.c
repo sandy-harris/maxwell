@@ -128,8 +128,7 @@ void do1k( unsigned delay, unsigned claim )
 
 int main( int argc, char **argv)
 {
-	unsigned a, b, delay, limit, *ptr ;
-	int i, p, out, fast, halt ;
+	int i, p, fast, halt ;
 	char *u, *v ;
 
 	/*

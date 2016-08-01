@@ -2,8 +2,10 @@ test: maxwell
 	./maxwell -s -h 64 -f  0 | ent | grep Entropy
 	./maxwell -s -h 64 -f 64 | ent | grep Entropy
 
+CFLAGS=-Wall -O2
+
 maxwell : maxwell.c maxwell.h qht.o timermod.o
-	gcc -o maxwell maxwell.c qht.o timermod.o
+	gcc $(CFLAGS) -o maxwell maxwell.c qht.o timermod.o
 
 clean:
 	rm *.o maxwell test.sam test.qht test.parity test.mix test.summary results/*
