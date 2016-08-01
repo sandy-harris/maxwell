@@ -24,7 +24,6 @@ typedef unsigned u32 ;
 /* forward declarations of functions */
 
 u32 qht(u32) ;
-u32 idea(u32,u32) ;
 
 u32 t5() ;
 u32 t7() ;

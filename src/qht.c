@@ -52,20 +52,6 @@
 	mixer for 32-bit words.
 */
 
-u32 qht(u32 x)
-{
-	u32 a, b ;
-	a = x >> 16 ;		// high 16 bits
-	b = x & 0xffff ;	// low 16
-	a = idea(a,b) ;		// a *= b
-	b = idea(a,b) ;		// b *= a
-	return( (a<<16) | b) ;
-}
-
-/*
-	IDEA multiplication
-	borrowed from the IDEA cipher
-*/
 #define	MAX (1<<16)
 #define MOD (MAX+1)
 
@@ -73,8 +59,8 @@ u32 idea(u32 a, u32 b)
 {
 	u32 x ;
 	// make sure they are in range
-	a %= MOD ;
-	b %= MOD ;
+	// a %= MOD ;
+	// b %= MOD ;
 	// special cases
 	if( (a == 0) && (b == 0))
 		return(1) ;
@@ -89,4 +75,14 @@ u32 idea(u32 a, u32 b)
 			return(0) ;
 		else	return(x) ;
 	}
+}
+
+u32 qht(u32 x)
+{
+	u32 a, b ;
+	a = x >> 16 ;		// high 16 bits
+	b = x & 0xffff ;	// low 16
+	a = idea(a,b) ;		// a *= b
+	b = idea(a,b) ;		// b *= a
+	return( (a<<16) | b) ;
 }
