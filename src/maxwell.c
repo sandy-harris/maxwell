@@ -76,6 +76,8 @@ u32 sha_c[] = {0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476, 0xC3D2E1F0} ;
 
 // forward declarations
 void do1k( unsigned, unsigned ) ;
+void error_exit(const char *) ;
+void message(const char *) ;
 
 int main( int argc, char **argv)
 {

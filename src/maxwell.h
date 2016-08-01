@@ -40,6 +40,3 @@ u32 gpar() ;
 u32 tpar() ;
 
 u32 parity(u32) ;
-
-void error_exit(const char *) ;
-void message(const char *) ;
