@@ -101,8 +101,19 @@ int main( int argc, char **argv)
 	mul = MUL ;
 	loops = MIN_LOOPS ;
 
-	/* argument processing */
 	prog_name = *argv ;
+
+	// documented in getuid(1) as "always successful"
+	// so do not bother checking for failure
+	user = geteuid() ;
+
+	// check that the required clock is present
+	// provided by real time library
+	// got_clock() is in timermod.c with other clock stuff
+	if( !got_clock() )
+		error_exit ( "cannot read real time clock") ;
+
+	// process command-line arguments
 	for( argc--, argv++ ; (argc > 0) && (*argv != NULL) ; argc--, argv++ )	{
 		u = *argv ;
 		if( u[0] != '-' )
@@ -156,14 +167,6 @@ int main( int argc, char **argv)
 				usage() ;
 		}
 	}
-
-	// documented in getuid(1) as "always successful"
-	// so do not bother checking for failure
-	user = geteuid() ;
-
-	/*
-		set up various things
-	*/
 
 	// not testing and not root: fail
 	if( demon && (user != 0) )	{

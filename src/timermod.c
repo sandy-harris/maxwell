@@ -47,6 +47,15 @@
 #define B 1000000000
 #define M 1000000
 
+int got_clock( void )
+{
+	struct timespec t ;
+	// use monotonic clock, which not even root can reset
+	if( clock_gettime(CLOCK_MONOTONIC,&t) == -1)
+		return 0 ;
+	else	return 1 ;
+}
+
 /*
 	Generic timer modulo m
 	using a hi-resolution timer
@@ -61,7 +70,7 @@ unsigned tmod(int m)
 	int ret ;
 	unsigned x ;
 	// use monotonic clock, which not even root can reset
-	if( (ret = clock_gettime(CLOCK_MONOTONIC,&t)) == - 1)	{
+	if( (ret = clock_gettime(CLOCK_MONOTONIC,&t)) == -1)	{
 		fprintf(stderr,"timer mod: clock read fails\n") ;
 	}
 	/*

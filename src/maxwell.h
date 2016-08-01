@@ -25,15 +25,17 @@ typedef unsigned u32 ;
 
 u32 qht(u32) ;
 
-u32 t5() ;
-u32 t7() ;
-u32 t31() ;
-u32 t255() ;
+int got_clock(void) ;
 
-u32 g5() ;
-u32 g7() ;
-u32 g31() ;
-u32 g255() ;
+u32 t5(void) ;
+u32 t7(void) ;
+u32 t31(void) ;
+u32 t255(void) ;
 
-u32 gpar() ;
-u32 tpar() ;
+u32 g5(void) ;
+u32 g7(void) ;
+u32 g31(void) ;
+u32 g255(void) ;
+
+u32 gpar(void) ;
+u32 tpar(void) ;
