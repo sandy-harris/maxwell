@@ -37,6 +37,3 @@ u32 g5(void) ;
 u32 g7(void) ;
 u32 g31(void) ;
 u32 g255(void) ;
-
-u32 gpar(void) ;
-u32 tpar(void) ;

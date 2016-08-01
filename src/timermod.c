@@ -27,6 +27,10 @@
 
 	mod 31 or mod 255 are suitable if
 	more entropy is expected
+
+	maxwell(8) uses
+		t31() for samples
+		t5()  for random initialisations
 */
 
 /*
@@ -139,43 +143,3 @@ u32 g7(void){ return( gmod(7)+1 ) ; }
 
 u32 t31(void){ return( tmod(31)+1 ) ; }
 u32 g31(void){ return( gmod(31)+1 ) ; }
-
-/*
-	functions to take the parity
-	of a timer
-*/
-
-// Kernighan's method
-// https://graphics.stanford.edu/~seander/bithacks.html#CountBitsSetKernighan
-u32 parity(u32 v)
-{
-	u32 c;		// c accumulates the total bits set in v
-	for (c = 0; v; c++)
-		v &= v - 1;	// clear the least significant bit set
-	return c ;
-}
-
-u32 tpar(void)
-{
-	struct timespec t ;
-	int ret ;
-	u32 x ;
-	// use monotonic clock, which not even root can reset
-	if( (ret = clock_gettime(CLOCK_MONOTONIC,&t)) == - 1)	{
-		fprintf(stderr,"timer mod: clock read fails\n") ;
-	}
-	x = parity(t.tv_sec ^ t.tv_nsec ) ;
-	return( x ) ;
-}
-
-u32 gpar(void)
-{
-	struct timeval t ;
-	int ret ;
-	u32 x ;
-	if( (ret = gettimeofday(&t,NULL)) == - 1)	{
-		fprintf(stderr,"timer mod: clock read fails\n") ;
-	}
-	x = parity(t.tv_sec ^ t.tv_usec ) ;
-	return( x ) ;
-}
